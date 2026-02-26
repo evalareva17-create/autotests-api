@@ -34,3 +34,8 @@ get_user_response = httpx.get(f"http://localhost:8000/api/v1/users/{user_id}", h
 get_user_response_data = get_user_response.json()
 
 print('get_user_response_data:', get_user_response_data)
+
+# 4. Удаляем пользователя (DELETE)
+delete_user_response = httpx.delete(f"http://localhost:8000/api/v1/users/{user_id}", headers=get_user_headers)
+
+print('delete_user_response status:', delete_user_response.status_code)
