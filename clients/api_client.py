@@ -1,29 +1,31 @@
 from typing import Any
 
 from httpx import Client, URL, Response, QueryParams
-from httpx._types import RequestData, RequestFiles
+from httpx._types import RequestData, RequestFiles, HeaderTypes
 
 
 class APIClient:
     def __init__(self, client: Client):
         self.client = client
 
-    def get(self, url: URL | str, params: QueryParams | None = None) -> Response:
+    def get(self, url: URL | str, params: QueryParams | None = None, headers: HeaderTypes | None = None) -> Response:
         """
         Выполняет GET-запрос.
 
         :param url: URL-адрес эндпоинта.
         :param params: GET-параметры запроса (например, ?key=value).
+        :param headers: Заголовки запроса.
         :return: Объект Response с данными ответа.
         """
-        return self.client.get(url, params=params)
+        return self.client.get(url, params=params, headers=headers)
 
     def post(
             self,
             url: URL | str,
             json: Any | None = None,
             data: RequestData | None = None,
-            files: RequestFiles | None = None
+            files: RequestFiles | None = None,
+            headers: HeaderTypes | None = None
     ) -> Response:
         """
         Выполняет POST-запрос.
@@ -32,25 +34,28 @@ class APIClient:
         :param json: Данные в формате JSON.
         :param data: Форматированные данные формы (например, application/x-www-form-urlencoded).
         :param files: Файлы для загрузки на сервер.
+        :param headers: Заголовки запроса.
         :return: Объект Response с данными ответа.
         """
-        return self.client.post(url, json=json, data=data, files=files)
+        return self.client.post(url, json=json, data=data, files=files, headers=headers)
 
-    def patch(self, url: URL | str, json: Any | None = None) -> Response:
+    def patch(self, url: URL | str, json: Any | None = None, headers: HeaderTypes | None = None) -> Response:
         """
         Выполняет PATCH-запрос (частичное обновление данных).
 
         :param url: URL-адрес эндпоинта.
         :param json: Данные для обновления в формате JSON.
+        :param headers: Заголовки запроса.
         :return: Объект Response с данными ответа.
         """
-        return self.client.patch(url, json=json)
+        return self.client.patch(url, json=json, headers=headers)
 
-    def delete(self, url: URL | str) -> Response:
+    def delete(self, url: URL | str, headers: HeaderTypes | None = None) -> Response:
         """
         Выполняет DELETE-запрос (удаление данных).
 
         :param url: URL-адрес эндпоинта.
+        :param headers: Заголовки запроса.
         :return: Объект Response с данными ответа.
         """
-        return self.client.delete(url)
+        return self.client.delete(url, headers=headers)

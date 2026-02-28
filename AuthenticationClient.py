@@ -1,0 +1,1 @@
+# This file has been moved to clients/authentication/authentication_client.py
