@@ -25,13 +25,6 @@ class Fake:
         """
         return self.faker.text()
 
-    def sentence(self) -> str:
-        """
-        Метод для генерации случайного предложения
-        :return: Случайное предложение
-        """
-        return self.faker.sentence()
-
     def uuid4(self) -> str:
         """
         Метод для генерации случайного UUID

@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field, ConfigDict
 
 from clients.files.files_schema import FileSchema
 from clients.users.users_schema import UserSchema
+from tools.fakers import fake
 
 
 class CourseSchema(BaseModel):
@@ -50,11 +51,11 @@ class CreateCourseRequestSchema(BaseModel):
     """
     model_config = ConfigDict(populate_by_name=True)
 
-    title: str
-    max_score: int = Field(alias="maxScore")
-    min_score: int = Field(alias="minScore")
-    description: str
-    estimated_time: str = Field(alias="estimatedTime")
+    title: str = Field(default_factory=fake.sentence)
+    max_score: int = Field(default_factory=fake.max_score, alias="maxScore")
+    min_score: int = Field(default_factory=fake.min_score, alias="minScore")
+    description: str = Field(default_factory=fake.text)
+    estimated_time: str = Field(default_factory=fake.estimated_time, alias="estimatedTime")
     preview_file_id: str = Field(alias="previewFileId")
     created_by_user_id: str = Field(alias="createdByUserId")
 
@@ -72,11 +73,11 @@ class UpdateCourseRequestSchema(BaseModel):
     """
     model_config = ConfigDict(populate_by_name=True)
 
-    title: str | None = None
-    max_score: int | None = Field(default=None, alias="maxScore")
-    min_score: int | None = Field(default=None, alias="minScore")
-    description: str | None = None
-    estimated_time: str | None = Field(default=None, alias="estimatedTime")
+    title: str | None = Field(default_factory=fake.sentence)
+    max_score: int | None = Field(default_factory=fake.max_score, alias="maxScore")
+    min_score: int | None = Field(default_factory=fake.min_score, alias="minScore")
+    description: str | None = Field(default_factory=fake.text)
+    estimated_time: str | None = Field(default_factory=fake.estimated_time, alias="estimatedTime")
 
 
 class UpdateCourseResponseSchema(BaseModel):
