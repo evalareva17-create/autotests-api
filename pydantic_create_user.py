@@ -27,5 +27,4 @@ class CreateUserResponseSchema(BaseModel):
     """
     Модель ответа успешного создания пользователя.
     """
-    # В ответе приходит объект "user", который соответствует структуре UserSchema
     user: UserSchema

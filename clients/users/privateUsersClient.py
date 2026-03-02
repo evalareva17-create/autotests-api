@@ -1,12 +1,12 @@
 from typing import TypedDict
-
+from pydantic import BaseModel
 from httpx import Response
 
 from clients.api_client import APIClient
-from clients.private_http_builder import get_private_http_client, AuthenticationUserDict
+from clients.private_http_builder import get_private_http_client, AuthenticationUserSchema
 
 
-class UpdateUserRequestDict(TypedDict):
+class UpdateUserRequestSchema(BaseModel):
     """
     Описание структуры запроса на обновление пользователя.
     """
@@ -38,7 +38,7 @@ class PrivateUsersClient(APIClient):
         """
         return self.get(f"/api/v1/users/{user_id}")
 
-    def update_user_api(self, user_id: str, request: UpdateUserRequestDict) -> Response:
+    def update_user_api(self, user_id: str, request: UpdateUserRequestSchema) -> Response:
         """
         Метод обновления пользователя по идентификатору.
 
@@ -59,7 +59,7 @@ class PrivateUsersClient(APIClient):
 
 
 # Добавляем builder для PrivateUsersClient
-def get_private_users_client(user: AuthenticationUserDict) -> PrivateUsersClient:
+def get_private_users_client(user: AuthenticationUserSchema) -> PrivateUsersClient:
     """
     Функция создаёт экземпляр PrivateUsersClient с уже настроенным HTTP-клиентом.
 
