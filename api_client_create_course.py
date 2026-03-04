@@ -10,7 +10,7 @@ from tools.fakers import fake
 public_users_client = get_public_users_client()
 
 create_user_request = CreateUserRequestSchema(
-    email=fake.email(),
+    email=fake.email(), 
     password=fake.password(),
     last_name=fake.last_name(),
     first_name=fake.first_name(),

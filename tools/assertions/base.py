@@ -1,0 +1,44 @@
+from typing import Any
+
+
+def assert_equal(actual: Any, expected: Any, name: str):
+    """
+    Проверяет, что фактическое значение равно ожидаемому.
+
+    :param name: Название проверяемого значения.
+    :param actual: Фактическое значение.
+    :param expected: Ожидаемое значение.
+    :raises AssertionError: Если значения не равны.
+    """
+    assert actual == expected, (
+        f'Incorrect value: "{name}". '
+        f'Expected: {expected}. Actual: {actual}'
+    )
+
+
+def assert_is_true(actual: Any, name: str):
+    """
+    Проверяет, что фактическое значение является истинным.
+
+    :param name: Название проверяемого значения.
+    :param actual: Фактическое значение.
+    :raises AssertionError: Если фактическое значение ложно.
+    """
+    assert actual, (
+        f'Incorrect value: "{name}". '
+        f'Expected true value but got: {actual}'
+    )
+
+
+def assert_status_code(actual: int, expected: int):
+    """
+    Проверяет, что статус-код ответа соответствует ожидаемому.
+
+    :param actual: Фактический статус-код.
+    :param expected: Ожидаемый статус-код.
+    :raises AssertionError: Если статус-коды не совпадают.
+    """
+    assert actual == expected, (
+        f'Incorrect status code. '
+        f'Expected: {expected}. Actual: {actual}'
+    )
