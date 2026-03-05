@@ -1,51 +1,39 @@
+"""Урок 8.5: Использование фикстуры function_user
+
+Фикстура function_user:
+- Создает пользователя перед каждым тестом
+- Возвращает UserFixture с request и response
+- Убирает дублирование кода создания пользователя
+"""
 from http import HTTPStatus
 
 import pytest
 
-from clients.authentication.authentication_client import get_authentication_client
+from clients.authentication.authentication_client import AuthenticationClient
 from clients.authentication.authentication_schema import LoginRequestSchema, LoginResponseSchema
-from clients.users.public_users_client import get_public_users_client
-from clients.users.users_schema import CreateUserRequestSchema
+from tests.conftest import UserFixture
 from tools.assertions.authentication import assert_login_response
 from tools.assertions.base import assert_status_code
 from tools.assertions.schema import validate_json_schema
-from tools.fakers import fake
+
 
 @pytest.mark.regression
 @pytest.mark.authentication
-def test_login():
-    # 1. Инициализация клиентов
-    public_users_client = get_public_users_client()
-    authentication_client = get_authentication_client()
+def test_login(function_user: UserFixture, authentication_client: AuthenticationClient):
+    """Тест аутентификации с использованием фикстуры function_user"""
+    # Запрос на логин
+    request = LoginRequestSchema(email=function_user.email, password=function_user.password)
+    # Выполняем логин
+    response = authentication_client.login_api(request)
+    # Валидация ответа
+    response_data = LoginResponseSchema.model_validate_json(response.text)
 
-    # 2. Создание пользователя
-    create_user_request = CreateUserRequestSchema(
-        email=fake.email(),
-        password=fake.password(),
-        last_name=fake.last_name(),
-        first_name=fake.first_name(),
-        middle_name=fake.middle_name()
-    )
-    public_users_client.create_user(create_user_request)
+    response_data = LoginResponseSchema.model_validate_json(response.text)
 
-    # 3. Аутентификация
-    login_request = LoginRequestSchema(
-        email=create_user_request.email,
-        password=create_user_request.password
-    )
-    login_response = authentication_client.login_api(login_request)
+    assert_status_code(response.status_code, HTTPStatus.OK)
+    assert_login_response(response_data)
 
-    # 4. Проверка статус-кода
-    assert_status_code(login_response.status_code, HTTPStatus.OK)
-
-    # 5. Десериализация ответа
-    login_response_data = LoginResponseSchema.model_validate_json(login_response.text)
-
-    # 6. Проверка тела ответа
-    assert_login_response(login_response_data)
-
-    # 7. Валидация JSON-схемы
     validate_json_schema(
-        instance=login_response.json(),
+        instance=response.json(),
         schema=LoginResponseSchema.model_json_schema()
     )
