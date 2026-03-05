@@ -7,6 +7,7 @@
 - Гибкость: легко добавлять новые данные
 """
 import pytest
+from _pytest.fixtures import SubRequest
 
 
 # ============================================================================
@@ -42,3 +43,37 @@ def test_several_numbers(number: int, expected: int):
 def test_multiplication_of_numbers(os: str, host: str):
     """Тест выполнится 12 раз (4 os × 3 hosts)"""
     assert len(os + host) > 0
+
+
+# ============================================================================
+# 4. Параметризация фикстур
+# ============================================================================
+
+@pytest.fixture(params=[
+    "https://dev.company.com",
+    "https://stable.company.com",
+    "https://prod.company.com"
+])
+def host(request: SubRequest) -> str:
+    """Фикстура вернет три разных хоста"""
+    return request.param
+
+
+def test_host(host: str):
+    """Автотест автоматически параметризован из фикстуры"""
+    print(f"Running test on host: {host}")
+
+
+# ============================================================================
+# 5. Параметризация классов
+# ============================================================================
+
+@pytest.mark.parametrize("user", ["Alice", "Zara"])
+class TestOperations:
+    """Параметр user передается в каждый метод класса"""
+
+    def test_user_with_operations(self, user: str):
+        print(f"User with operations: {user}")
+
+    def test_user_without_operations(self, user: str):
+        print(f"User without operations: {user}")
