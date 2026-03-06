@@ -1,4 +1,4 @@
-from clients.users.users_schema import UserSchema, CreateUserResponseSchema, GetUserResponseSchema
+from clients.users.users_schema import UserSchema, CreateUserResponseSchema, GetUserResponseSchema, CreateUserRequestSchema
 from tools.assertions.base import assert_equal
 
 
@@ -17,3 +17,14 @@ def assert_get_user_response(
 ) -> None:
     """Проверяет, что данные пользователя при создании и при запросе совпадают"""
     assert_user(get_user_response.user, create_user_response.user)
+
+
+def assert_create_user_response(
+    request: CreateUserRequestSchema,
+    response: CreateUserResponseSchema
+) -> None:
+    """Проверяет, что данные пользователя при создании совпадают с запросом"""
+    assert_equal(response.user.email, request.email, "Некорректный email пользователя")
+    assert_equal(response.user.last_name, request.last_name, "Некорректный last_name пользователя")
+    assert_equal(response.user.first_name, request.first_name, "Некорректный first_name пользователя")
+    assert_equal(response.user.middle_name, request.middle_name, "Некорректный middle_name пользователя")
